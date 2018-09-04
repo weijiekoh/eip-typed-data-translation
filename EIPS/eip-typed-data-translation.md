@@ -1,16 +1,14 @@
 ---
 
-```
-eip: <to be assigned>
+eip: To be assigned
 title: A means to provide natural-language descriptions of data in Ethereum signing prompts
 author: Koh Wei Jie <weijie.koh@consensys.net>
-discussions-to: <URL>
+discussions-to: Todo: add URL here
 status: Draft
 type: Standards Track
 category: ERC
 created: 2018-08-31
 requires: EIP712
-```
 
 ---
 
