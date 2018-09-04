@@ -40,22 +40,22 @@ Raw EIP712 typed data:
 
 ```
 message: {
-        from: {
-            name: 'Cow',
-            wallet: '0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826',
-        },
-        to: {
-            name: 'Bob',
-            wallet: '0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB',
-        },
-        contents: 'Hello, Bob!',
-    }
+    from: {
+        name: 'Cow',
+        wallet: '0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826',
+    },
+    to: {
+        name: 'Bob',
+        wallet: '0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB',
+    },
+    contents: 'Hello, Bob!',
+}
 ```
 
 Translation template:
 
 ```
-{{message.from.name}} ({{message.from.wallet | shorten}}} ) is sending the message "{{message.contents}}}!" to {{message.to.name}}} ({{message.to.wallet | shorten}})."
+{{message.from.name}} ({{message.from.wallet | shorten}}) is sending the message "{{message.contents}}!" to {{message.to.name}} ({{message.to.wallet | shorten}})."
 ```
 
 Translated result:
