@@ -34,6 +34,36 @@ To rely on dApps to do so creates a phishing risk, as malicious dApps may reques
 
 As such, Ethereum wallet signing prompts should be respnsible for displaying these natural-language explanatory blurbs. Furthermore, phishing can be prevented by validating translation templates off their cryptographic hash obtained from the contract specified in the EIP712 `domain` field.
 
+## Example
+
+Raw EIP712 typed data:
+
+```
+message: {
+        from: {
+            name: 'Cow',
+            wallet: '0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826',
+        },
+        to: {
+            name: 'Bob',
+            wallet: '0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB',
+        },
+        contents: 'Hello, Bob!',
+    }
+```
+
+Translation template:
+
+```
+{{message.from.name}} ({{message.from.wallet | shorten}}} ) is sending the message "{{message.contents}}}!" to {{message.to.name}}} ({{message.to.wallet | shorten}})."
+```
+
+Translated result:
+
+```
+Cow (0xCD2a3d9F... ) is sending the message "Hello, Bob!" to Bob (0xbBbBBBBb...)."
+```
+
 ## Specification
 <!--The technical specification should describe the syntax and semantics of any new feature. The specification should be detailed enough to allow competing, interoperable implementations for any of the current Ethereum platforms (go-ethereum, parity, cpp-ethereum, ethereumj, ethereumjs, and [others](https://github.com/ethereum/wiki/wiki/Clients)).-->
 
