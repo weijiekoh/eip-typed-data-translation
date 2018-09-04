@@ -129,7 +129,7 @@ template: {
 dApps must include `defaultLang`, or risk a degraded user experience as the wallet provider has nothing to fall back upon if the user's preferred language code does not have a corresponding template.
 
 |  Scenario | dApp provides *T*  | Contract provides *m(T)*  |
-|---|---|---|---|---|
+|---|---|---|
 | 1 and 5  | Y  | Y  |
 | 2 | Y | N |
 | 3  | N  | Y  |
