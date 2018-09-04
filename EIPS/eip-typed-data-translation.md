@@ -149,7 +149,7 @@ The wallet should warn the user that the translated blurb *E* is unverified, and
 
 #### Scenario 3: the dApp does not provide the template *T*, but its contract provides the template multihash *m(T)*.
 
-The wallet should retrieve *T* via [IPFS](https://ipfs.io/). Since IPFS uses multihashes for content addressing, it can be fetched from `IPFS gateway URL || m(T)`.
+Since IPFS uses multihashes for content addressing, the wallet should retrieve *T* via [IPFS](https://ipfs.io/).
 
 #### Scenario 4: the dApp does not provide the template *T*, and contract *C* does not provide its multihash *m(T)*.
 
