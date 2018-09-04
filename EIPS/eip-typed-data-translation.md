@@ -97,9 +97,9 @@ TODO: specify which template language to adopt
 
 *g*: A [BCP 47 identifier ](https://tools.ietf.org/rfc/bcp/bcp47.txt) for a language, such as `en-US` or `zh-CN`.
 
-**Domain separator**
+<!-- **Domain separator**
 
-*domainSeparator*: as defined in [EIP712](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-712.md#definition-of-domainseparator).
+*domainSeparator*: as defined in [EIP712](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-712.md#definition-of-domainseparator). -->
 
 **Multihash**
 
@@ -109,7 +109,7 @@ TODO: specify which template language to adopt
 
 In the context of this EIP, there are 5 possible scenarios for when a dApp makes an`eth_signTypedData` RPC call to its Ethereum wallet provider.
 
-For all scenarios, we assume that the parameters of the call contain the `template` field alongside `domain` and `message`. 
+For all scenarios, we assume that the parameters of the call contain the `template` field alongside the EIP712`domain` and `message` fields.
 
 We also assume that `domain` must contain a `verifyingContract`field that contains a valid Ethereum contract address *C*.
 
