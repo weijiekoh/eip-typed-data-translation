@@ -128,7 +128,7 @@ template: {
 
 dApps must include `defaultLang`, or risk a degraded user experience as the wallet provider has nothing to fall back upon if the user's preferred language code does not have a corresponding template.
 
-|  Scenario | dApp provides *T*  | Contract provides *m(T)*  |
+|  Scenarios | dApp provides *T*  | Contract provides *m(T)*  |
 |---|---|---|
 | 1 and 5  | Y  | Y  |
 | 2 | Y | N |
@@ -137,7 +137,7 @@ dApps must include `defaultLang`, or risk a degraded user experience as the wall
 
 #### Scenario 1: the dApp provides the template *T*, and its contract provides the template multihash *m(T)*.
 
-The wallet provider should call*C* (see the *Ethereum contract interface*  section below) through an Ethereum node with the language code *g* to obtain *m(T)*. It then uses *m(T)* to verify *T*.
+The wallet provider should call *C* (see the *Ethereum contract interface*  section below) through an Ethereum node with the language code *g* to obtain *m(T)*. It then uses *m(T)* to verify *T*.
 
 Next, the wallet provider applies the template to the data to obtain the blurb and display it: **P(T, S) → E*. It must also give the user the option to view the raw data *S*.
 
@@ -214,6 +214,11 @@ TODO
 <!--The implementations must be completed before any EIP is given status "Final", but it need not be completed before the EIP is accepted. While there is merit to the approach of reaching consensus on the specification and rationale before writing code, the principle of "rough consensus and running code" is still useful when it comes to resolving many discussions of API details.-->
 
 TODO
+
+
+## Credits
+
+Many thanks to Raman Shalupau, ___, ___, and for their feedback and comments.
 
 ## Copyright
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
