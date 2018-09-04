@@ -103,7 +103,7 @@ TODO: specify which template language to adopt
 
 **Multihash**
 
-*m*: A self-describing hash protocol as defined [here](https://github.com/multiformats/multihash). It should use the SHA256 hash function. [Excluding the hash function and size bytes](https://ethereum.stackexchange.com/a/17112), it should produce 32-byte, base58 outputs.
+*m*: A self-describing hash protocol as defined [here](https://github.com/multiformats/multihash). It should use the SHA256 hash function. [Excluding the hash function and size bytes](https://ethereum.stackexchange.com/a/17112), it should produce 32-byte, base58 outputs which exactly match the IPFS [CIDV0](https://docs.ipfs.io/guides/concepts/cid/#version-0) format.
 
 ### Mechanism of action
 
@@ -149,7 +149,7 @@ The wallet should warn the user that the translated blurb *E* is unverified, and
 
 #### Scenario 3: the dApp does not provide the template *T*, but its contract provides the template multihash *m(T)*.
 
-In this case, the wallet should retrieve *T* by looking up *m(T)* via an [IPFS](https://ipfs.io/) gateway.
+The wallet should retrieve *T* via [IPFS](https://ipfs.io/). Since IPFS uses multihashes for content addressing, it can be fetched from `IPFS gateway URL || m(T)`.
 
 #### Scenario 4: the dApp does not provide the template *T*, and contract *C* does not provide its multihash *m(T)*.
 
@@ -187,13 +187,12 @@ EipXXXTemplateHashSet(string indexed _g, bytes32 indexed _mHash)
 ## Rationale
 <!--The rationale fleshes out the specification by describing what motivated the design and why particular design decisions were made. It should describe alternate designs that were considered and related work, e.g. how the feature is supported in other languages. The rationale may also provide evidence of consensus within the community, and should discuss important objections or concerns raised during discussion.-->
 
-TODO:
+The following assumptions and considerations shaped this EIP:
 
-* Explain why this EIP uses the IPFS-compatible multihash function
-* Explain why this EIP uses the template language specified above
-* Explain the assumptions made
-	- Why only *C* should provide *m(T)*
-	- Why both the dApp and IPFS can provide *T*
+1. IPFS is an ideal means of template storage as it is decentralised and censorship-resistant.
+2. To save gas, templates should not be stored in contracts. Instead, contracts should store their multihash, so they can be retrieved from IPFS.
+3. A simpler default template language is more secure and phishing-resistant than a complex one.
+4. In the context of this EIP, wallet providers are only responsible for ensuring that messages are translated according to the contract's specified template. Wallet providers are not responsible for what a said contracts do with signed data.
 
 ## Backwards Compatibility
 <!--All EIPs that introduce backwards incompatibilities must include a section describing these incompatibilities and their severity. The EIP must explain how the author proposes to deal with these incompatibilities. EIP submissions
@@ -205,10 +204,7 @@ This EIP is fully compatible with EIP712.
 
 There is a need to provide a means for wallet providers to verify templates for contracts which have not implemented the interface described above, or cannot be [upgraded](https://eips.ethereum.org/EIPS/eip-897) to do so. This can be done in a future EIP.
 
-## Test Cases
-<!--Test cases for an implementation are mandatory for EIPs that are affecting consensus changes. Other EIPs can choose to include links to test cases if applicable.-->
-
-TODO
+Future EIPs may also extend the `template` field to specify non-default template processing languages.
 
 ## Implementation
 <!--The implementations must be completed before any EIP is given status "Final", but it need not be completed before the EIP is accepted. While there is merit to the approach of reaching consensus on the specification and rationale before writing code, the principle of "rough consensus and running code" is still useful when it comes to resolving many discussions of API details.-->
