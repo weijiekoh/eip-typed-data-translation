@@ -6,14 +6,14 @@ discussions-to: Todo: add URL here
 status: Draft
 type: Standards Track
 category: ERC
-created: 2018-08-31
+created: 2018-09-05
 requires: EIP712
 ---
 
 ## Simple Summary
 <!--"If you can't explain it simply, you don't understand it well enough." Provide a simplified and layman-accessible explanation of the EIP.-->
 
-This standard specifies how to translate data in wallet signing prompts into meaningful natural-language descriptions. This allows dApps to convey the intent behind each signature request, and users to make better-informed decsions about whether to sign a piece of data. It also reduces the risk of signing-prompt phishing.
+This standard specifies how to translate data in wallet signing prompts into meaningful natural-language descriptions. This allows dApps to convey the intent behind each signature request, and users to make better-informed decisions about whether to sign a piece of data. It also reduces the risk of signing-prompt phishing.
 
 ## Abstract
 <!--A short (~200 word) description of the technical issue being addressed.-->
@@ -71,11 +71,11 @@ Cow (0xCD2a3d9F... ) is sending the message "Hello, Bob!" to Bob (0xbBbBBBBb...)
 
 **Data to be signed**
 
-𝕊: EIP712-compatible typed structured data. Refer to the [EIP712 specification](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-712.md#definition-of-typed-structured-data-%F0%9D%95%8A).
+𝕊 (henceforth *S*): EIP712-compatible typed structured data. Refer to the [EIP712 specification](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-712.md#definition-of-typed-structured-data-%F0%9D%95%8A).
 
 **Explanatory Blurb**
 
-*E*: a short UTF-8 text string which explains, in natural language, what 𝕊 means or does.
+*E*: a short UTF-8 text string which explains, in natural language, what S means or does.
 
 **Template**
 
@@ -89,13 +89,13 @@ TODO: specify which template language to adopt
 
 **Template processor**
 
-*P*: a function that takes a template and EIP712-compatible data structure 𝕊 to produce and explanatory blurb *E*.
+*P*: a function that takes a template and EIP712-compatible data structure S to produce and explanatory blurb *E*.
 
-*P(T, 𝕊) → E*
+*P(T, S) → E*
 
 **Language tag**
 
-*g*: A [BCP 47 identifier ](https://tools.ietf.org/rfc/bcp/bcp47.txt) for a language, such as "en-US" or "zh-CN".
+*g*: A [BCP 47 identifier ](https://tools.ietf.org/rfc/bcp/bcp47.txt) for a language, such as `en-US` or `zh-CN`.
 
 **Domain separator**
 
@@ -107,40 +107,61 @@ TODO: specify which template language to adopt
 
 ### Mechanism of action
 
-#### *Scenario 1*: the dApp provides *T*, and its contract provides *m(T)*
+In the context of this EIP, there are 5 possible scenarios for when a dApp makes an`eth_signTypedData` RPC call to its Ethereum wallet provider.
 
-First, A dApp makes an`eth_signTypedData` RPC call to its Ethereum wallet provider. The parameters to this call should contain *domainSeparator* and 𝕊 in the `domain` and `message` fields respectively.
+For all scenarios, we assume that the parameters of the call contain the `template` field alongside `domain` and `message`. 
 
-*domainSeparator* must contain the `verifyingContract`field that contains a valid Ethereum contract address *C*.
+We also assume that `domain` must contain a `verifyingContract`field that contains a valid Ethereum contract address *C*.
 
-Additionally, the call should contain the `template` field alongside `domain` and `message`:
-	
+
 ```
-domain: { ... },
-message: { ... }
+domain: {
+    verifyingContract: C,
+    ...
+},
+message: S,
 template: {
-    multihash: T,
+    template: T,
     defaultLang: g
 }
 ```
 
-The wallet provider then calls *C* (see the *Ethereum contract interface*  section below) to retrieve *m(T)*, and uses it to verify *T*. It may use `g` as specified in `defaultLang`, or the user's preferred languge code.
+dApps must include `defaultLang`, or risk a degraded user experience as the wallet provider has nothing to fall back upon if the user's preferred language code does not have a corresponding template.
 
-Next, the wallet provider performs *P(T, 𝕊)* and displays the blurb *E*. It must also provide the user the ability to view the raw data *𝕊*.
+|  Scenario | dApp provides *T*  | Contract provides *m(T)*  |
+|---|---|---|---|---|
+| 1 and 5  | Y  | Y  |
+| 2 | Y | N |
+| 3  | N  | Y  |
+| 4 | N  | N  |
 
-Finally, the wallet provider should indicate that *E* is can be trusted insofar as contract *C* is trustworthy.
+#### Scenario 1: the dApp provides the template *T*, and its contract provides the template multihash *m(T)*.
 
-#### *Scenario 2*: the dApp does not provide *T*, but its contract provides *m(T)*
+The wallet provider should call*C* (see the *Ethereum contract interface*  section below) through an Ethereum node with the language code *g* to obtain *m(T)*. It then uses *m(T)* to verify *T*.
+
+Next, the wallet provider applies the template to the data to obtain the blurb and display it: **P(T, S) → E*. It must also give the user the option to view the raw data *S*.
+
+Finally, the wallet provider should indicate that *E* is can be trusted as long as as contract *C* is trustworthy.
+
+#### Secnario 2: the dApp provides the template *T*, but the contract *C* does not provide its multihash *m(T)*.
+
+The wallet should warn the user that the translated blurb *E* is unverified, and give the user the option to view it. Otherwise, the blurb should be hidden from the user by default.
+
+#### Scenario 3: the dApp does not provide the template *T*, but its contract provides the template multihash *m(T)*.
 
 In this case, the wallet should retrieve *T* by looking up *m(T)* via an [IPFS](https://ipfs.io/) gateway.
 
-#### *Scenario 3*: the dApp does not provide *T*, and contract *C* does not provide *m(T)*
+#### Scenario 4: the dApp does not provide the template *T*, and contract *C* does not provide its multihash *m(T)*.
 
 The wallet's signing prompt should behave as per vanilla EIP712.
 
+#### Scenario 5: the multihash *m(T)* provided by the contract *C* does not match the calculated multihash of the dApp-provided template *T*.
+
+The wallet should warn the user that the dApp may be attempting a phishing attack.
+
 ### Ethereum contract interface
 
-#### Retrieve m(T)
+#### Retrieve the template multihash *m(T)*
 
 TODO: replace eipXXX with the this EIP number
 
@@ -148,13 +169,15 @@ TODO: replace eipXXX with the this EIP number
 function eipXXXGetTemplateHash(string _g) returns bytes32
 ```
 
-#### Set m(T)
+#### Set template multihash *m(T)*
+
+This should allow the contract owner(s) to modify *m(T)* stored in the contract if they update *T* provided by the dApp or upload a new version to IPFS.
 
 ```js
 function eipXXXSetTemplateHash(string _g, bytes32 _mHash)
 ```
 
-This should trigger the event:
+It should trigger the event:
 
 ```js
 EipXXXTemplateHashSet(string indexed _g, bytes32 indexed _mHash)
@@ -163,6 +186,14 @@ EipXXXTemplateHashSet(string indexed _g, bytes32 indexed _mHash)
 
 ## Rationale
 <!--The rationale fleshes out the specification by describing what motivated the design and why particular design decisions were made. It should describe alternate designs that were considered and related work, e.g. how the feature is supported in other languages. The rationale may also provide evidence of consensus within the community, and should discuss important objections or concerns raised during discussion.-->
+
+TODO:
+
+* Explain why this EIP uses the IPFS-compatible multihash function
+* Explain why this EIP uses the template language specified above
+* Explain the assumptions made
+	- Why only *C* should provide *m(T)*
+	- Why both the dApp and IPFS can provide *T*
 
 ## Backwards Compatibility
 <!--All EIPs that introduce backwards incompatibilities must include a section describing these incompatibilities and their severity. The EIP must explain how the author proposes to deal with these incompatibilities. EIP submissions
