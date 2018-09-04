@@ -22,17 +22,17 @@ This standard specifies the means by which EIP712-compatible structured data sho
 
 * a simple *template processor* which translates data to be signed into a natural language string, including internationalisation support;
 * an contract interface to get and set a translation template;
-* a simple way to verify translation templates
-* suggestions for future extensions to the `eth_signTypedData` web3 call, particulary for dApps with contracts that are already deployed and cannot be upgraded.
+* a simple way to verify translation templates;
+* as well as suggestions for future extensions to the `eth_signTypedData` web3 call, particulary for dApps with contracts that are already deployed and cannot be upgraded.
 
 ## Motivation
 <!--The motivation is critical for EIPs that want to change the Ethereum protocol. It should clearly explain why the existing protocol specification is inadequate to address the problem that the EIP solves. EIP submissions without sufficient motivation may be rejected outright.-->
 
-Users of distributed applications (dApps) currently do not have a simple way to understand the data in a signing prompt. Although the [EIP712](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-712.md) standard for typed structured data signing allows dApps to clearly lay out data in signing prompts, users have to rely on the dApp or their own research to find out what their signatures will be used for. This is not ideal especially because signatures can authorise value transfers in certain smart contracts. As such, there is a need to effectively convey the meaning and intent behind a signature request,  in order to improve the user experience for such potentially consequential operations.
+Users of distributed applications (dApps) currently do not have a straightforward way to understand data in signing prompts. Although the [EIP712](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-712.md) standard for typed structured data signing allows dApps to clearly lay out such data, users have to rely on the dApp or their own research to find out what their signatures will be used for. This is less than ideal especially because signatures can authorise value transfers in certain smart contracts. As such, there is a need to effectively convey the meaning and intent behind a signature request,  in order to improve the user experience for such potentially consequential operations.
 
 To rely on dApps to do so creates a phishing risk, as malicious dApps may request that users sign data meant for a third-party contract, but misrepresent this in their off-wallet user interfaces.
 
-Ethereum wallet signing prompts should therefore be respnsible for displaying these natural-language explanatory blurbs. Phishing can be prevented by validating translation templates off the contract whose address is specified in the EIP712 `domain` field.
+As such, Ethereum wallet signing prompts should be respnsible for displaying these natural-language explanatory blurbs. Furthermore, phishing can be prevented by validating translation templates off their cryptographic hash obtained from the contract specified in the EIP712 `domain` field.
 
 ## Specification
 <!--The technical specification should describe the syntax and semantics of any new feature. The specification should be detailed enough to allow competing, interoperable implementations for any of the current Ethereum platforms (go-ethereum, parity, cpp-ethereum, ethereumj, ethereumjs, and [others](https://github.com/ethereum/wiki/wiki/Clients)).-->
@@ -54,6 +54,8 @@ Ethereum wallet signing prompts should therefore be respnsible for displaying th
 **Template language**
 
 A simple set of rules which govern the syntax and grammar of a template. Examples include [Mustache](https://mustache.github.io/) and [Jinja2](http://jinja.pocoo.org).
+
+TODO: specify which template language to adopt
 
 **Template processor**
 
@@ -94,7 +96,7 @@ template: {
 
 The wallet provider then calls *C* (see the *Ethereum contract interface*  section below) to retrieve *m(T)*, and uses it to verify *T*. It may use `g` as specified in `defaultLang`, or the user's preferred languge code.
 
-Next, the wallet provider performs *P(T, 𝕊)* and displays the blurb *E*, as well as an option to view the raw data *𝕊*.
+Next, the wallet provider performs *P(T, 𝕊)* and displays the blurb *E*. It must also provide the user the ability to view the raw data *𝕊*.
 
 Finally, the wallet provider should indicate that *E* is can be trusted insofar as contract *C* is trustworthy.
 
@@ -104,11 +106,13 @@ In this case, the wallet should retrieve *T* by looking up *m(T)* via an [IPFS](
 
 #### *Scenario 3*: the dApp does not provide *T*, and contract *C* does not provide *m(T)*
 
-1. The wallet's signing prompt should behave as per vanilla EIP712.
+The wallet's signing prompt should behave as per vanilla EIP712.
 
 ### Ethereum contract interface
 
 #### Retrieve m(T)
+
+TODO: replace eipXXX with the this EIP number
 
 ```js
 function eipXXXGetTemplateHash(string _g) returns bytes32
