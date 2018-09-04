@@ -103,7 +103,7 @@ TODO: specify which template language to adopt
 
 **Multihash**
 
-*m*: A self-describing hash protocol as defined [here](https://github.com/multiformats/multihash). It should use the SHA256 hash function. [Excluding the hash function and size bytes](https://ethereum.stackexchange.com/questions/17094/how-to-store-ipfs-hash-using-bytes), it should produce 32-byte base58 outputs.
+*m*: A self-describing hash protocol as defined [here](https://github.com/multiformats/multihash). It should use the SHA256 hash function. [Excluding the hash function and size bytes](https://ethereum.stackexchange.com/a/17112), it should produce 32-byte base58 outputs.
 
 ### Mechanism of action
 
