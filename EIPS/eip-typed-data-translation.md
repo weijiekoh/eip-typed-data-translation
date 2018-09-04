@@ -132,7 +132,7 @@ Finally, the wallet provider should indicate that *E* is can be trusted insofar 
 
 #### *Scenario 2*: the dApp does not provide *T*, but its contract provides *m(T)*
 
-In this case, the wallet should retrieve *T* by looking up *m(T)* via an [IPFS](https://ipfs.io/) gateway. The signing prompt, however, should inform the user that this translation has not been verified by the contract specified in `domainSeparator`.
+In this case, the wallet should retrieve *T* by looking up *m(T)* via an [IPFS](https://ipfs.io/) gateway.
 
 #### *Scenario 3*: the dApp does not provide *T*, and contract *C* does not provide *m(T)*
 
