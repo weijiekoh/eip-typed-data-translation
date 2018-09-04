@@ -21,7 +21,8 @@ This standard specifies how to translate data in wallet signing prompts into mea
 This standard specifies the means by which EIP712-compatible structured data should be converted into a text string. It includes:
 
 * a simple *template processor* which translates data to be signed into a natural language string, including internationalisation support;
-* an contract interface to set, get, and modify a translation template;
+* an contract interface to get and set a translation template;
+* a simple way to verify translation templates
 * suggestions for future extensions to the `eth_signTypedData` web3 call, particulary for dApps with contracts that are already deployed and cannot be upgraded.
 
 ## Motivation
@@ -135,6 +136,10 @@ without a sufficient backwards compatibility treatise may be rejected outright.-
 
 This EIP is fully compatible with EIP712.
 
+## Future work
+
+There is a need to provide a means for wallet providers to verify templates for contracts which have not implemented the interface described above, or cannot be [upgraded](https://eips.ethereum.org/EIPS/eip-897) to do so. This can be done in a future EIP.
+
 ## Test Cases
 <!--Test cases for an implementation are mandatory for EIPs that are affecting consensus changes. Other EIPs can choose to include links to test cases if applicable.-->
 
@@ -143,7 +148,7 @@ TODO
 ## Implementation
 <!--The implementations must be completed before any EIP is given status "Final", but it need not be completed before the EIP is accepted. While there is merit to the approach of reaching consensus on the specification and rationale before writing code, the principle of "rough consensus and running code" is still useful when it comes to resolving many discussions of API details.-->
 
-TOD
+TODO
 
 ## Copyright
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
