@@ -72,8 +72,7 @@ A simple set of rules which govern the syntax and grammar of a template. Example
 
 *domainSeparator*: as defined in [EIP712](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-712.md#definition-of-domainseparator).
 
-**Multihash**
-
+**
 
 ### Mechanism of action
 
