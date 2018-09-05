@@ -23,7 +23,7 @@ This standard specifies the means by which EIP712-compatible structured data sho
 * a simple *template processor* which translates data to be signed into a natural language string, including internationalisation support;
 * an contract interface to get and set a translation template;
 * a simple way to verify translation templates;
-* as well as suggestions for future extensions to the `eth_signTypedData` web3 call, particulary for dApps with contracts that are already deployed and cannot be upgraded.
+* suggestions for future extensions to the `eth_signTypedData` web3 call, particulary for dApps with contracts that are already deployed and cannot be upgraded.
 
 ## Motivation
 <!--The motivation is critical for EIPs that want to change the Ethereum protocol. It should clearly explain why the existing protocol specification is inadequate to address the problem that the EIP solves. EIP submissions without sufficient motivation may be rejected outright.-->
@@ -73,7 +73,7 @@ Cow (0xCD2a3d9F... ) is sending the message "Hello, Bob!" to Bob (0xbBbBBBBb...)
 
 𝕊 (henceforth *S*): EIP712-compatible typed structured data. Refer to the [EIP712 specification](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-712.md#definition-of-typed-structured-data-%F0%9D%95%8A).
 
-**Explanatory Blurb**
+**Explanatory blurb**
 
 *E*: a short UTF-8 text string which explains, in natural language, what S means or does.
 
@@ -171,14 +171,16 @@ function eipXXXGetTemplateHash(string _g) returns bytes32
 
 This should allow the contract owner(s) to modify *m(T)* stored in the contract if they update *T* provided by the dApp or upload a new version to IPFS.
 
+`_gHash` is the `keccak256()` hash of `g`. This allows contracts to maintain an internal `mapping(bytes32 => bytes32)` to store template hashes with minimal gas use.
+
 ```js
-function eipXXXSetTemplateHash(string _g, bytes32 _mHash)
+function eipXXXSetTemplateHash(bytes32 _gHash, bytes32 _mHash)
 ```
 
 It should trigger the event:
 
 ```js
-EipXXXTemplateHashSet(string indexed _g, bytes32 indexed _mHash)
+EipXXXTemplateHashSet(bytes32 indexed _gHash, bytes32 indexed _mHash)
 ```
 
 ## Default template language
