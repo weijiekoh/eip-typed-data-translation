@@ -83,7 +83,7 @@ Cow (0xCD2a3d9F... ) is sending the message "Hello, Bob!" to Bob (0xbBbBBBBb...)
 
 **Template language**
 
-A simple set of rules which govern the syntax and grammar of a template. This EIP proposes a simple default template language (see the Default Template Langauge section), but can be extended by future EIPs to allow dApps to specify other template languages.
+A simple set of rules which govern the syntax and grammar of a template. This EIP proposes a simple default template language (see the *Default Template Langauge* section), but can be extended by future EIPs to allow dApps to specify other template languages.
 
 **Template processor**
 
@@ -135,7 +135,7 @@ dApps must include `defaultLang`, or risk a degraded user experience as the wall
 
 #### Scenario 1: the dApp provides the template *T*, and its contract provides the template multihash *m(T)*.
 
-The wallet provider should call *C* (see the *Ethereum contract interface*  section below) through an Ethereum node with the language code *g* to obtain *m(T)*. It then uses *m(T)* to verify *T*.
+The wallet provider should call *C* (see the *Ethereum contract interface*  section below) through an Ethereum node with the `keccak256` hash of the desired language code *g* to obtain *m(T)*. It then uses *m(T)* to verify *T*.
 
 Next, the wallet provider applies the template to the data to obtain the blurb and display it: **P(T, S) → E*. It must also give the user the option to view the raw data *S*.
 
