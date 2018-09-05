@@ -83,9 +83,7 @@ Cow (0xCD2a3d9F... ) is sending the message "Hello, Bob!" to Bob (0xbBbBBBBb...)
 
 **Template language**
 
-A simple set of rules which govern the syntax and grammar of a template. Examples include [Mustache](https://mustache.github.io/) and [Jinja2](http://jinja.pocoo.org).
-
-TODO: specify which template language to adopt
+A simple set of rules which govern the syntax and grammar of a template. This EIP proposes a simple default template language (see the Default Template Langauge section), but can be extended by future EIPs to allow dApps to specify other template languages.
 
 **Template processor**
 
@@ -103,7 +101,7 @@ TODO: specify which template language to adopt
 
 **Multihash**
 
-*m*: A self-describing hash protocol as defined [here](https://github.com/multiformats/multihash). It should use the SHA256 hash function. [Excluding the hash function and size bytes](https://ethereum.stackexchange.com/a/17112), it should produce 32-byte, base58 outputs which exactly match the IPFS [CIDV0](https://docs.ipfs.io/guides/concepts/cid/#version-0) format.
+*m*: A self-describing hash protocol as defined [here](https://github.com/multiformats/multihash). It should use the SHA256 hash function. [Excluding the hash function and size bytes](https://ethereum.stackexchange.com/a/17112), it should produce 32-byte, base58 outputs which can be later reconstructed to match the [IPFS CIDV0 format](https://docs.ipfs.io/guides/concepts/cid/#version-0).
 
 ### Mechanism of action
 
@@ -183,6 +181,88 @@ It should trigger the event:
 EipXXXTemplateHashSet(string indexed _g, bytes32 indexed _mHash)
 ```
 
+## Default template language
+
+This EIP proposes a very simple default language. A trimmed down version of [Jinja2](http://jinja.pocoo.org/docs/2.10/templates), it only includes variable subsitution, conditionals, and a limited number of text filters.
+
+### Variable subsitution
+
+Use double curly braces: `{{ variable_name }}`
+
+Variable scope is the typed data *S* passed to the wallet via `eth_signTypedData`.
+
+Following the [Ether Mail example in EIP712](https://github.com/ethereum/EIPs/blob/master/assets/eip-712/Example.js), take the following as valid examples:
+
+`{{ message.from.name }}` → `Cow`
+
+`{{ message.from.wallet }}` → `0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826`
+
+`{{ domain.name }}` → `Ether Mail`
+
+All text is HTML-escaped by default. `<b>hello</b>` will display exactly as `<b>hello</b>`.
+
+To avoid recursion, variables that reference`template` field will be ignored.
+
+### Expressions
+
+Almost all [Jinja2 2.10](http://jinja.pocoo.org/docs/2.10/templates/#expressions) expressions are supported, except `()`.
+
+List indices start from 0 and use square brackets: `var[0]`.
+
+Supported expressions:
+
+| Expression | Type |
+|---|---|  
+| `"abc"`| String |
+| `42` or `42.23` | Number |
+| `[‘list’, ‘of’, ‘objects’]` | List |
+| `true` or `false` | Boolean |
+| `+` | Add |
+| `-` | Subtract |
+| `*` | Multiply |
+| `/` | Divide |
+| `//` |Divide and floor |
+| `%` | Modulo  |
+| `**` |  Raise to the power of |
+| `==` | Equal to |
+| `!=` | Not equal to |
+| `>` | Greater than |
+| `>=` | Greater than or equal to |
+| `<` | Smaller than |
+| `<=` | Smaller than or equal to |
+| `in` | Contains |
+
+### Conditionals
+
+Use `if`, `elif`, and `else`.
+
+```
+{% if message.temp < 0 %}
+    It's below freezing.
+{% elif message.temp == 0 %}
+    It's exactly 0 degrees.
+{% else %}
+    It's above freezing.
+{% endif %}
+```
+
+For simplicity and security, it delibrately excludes:
+
+1. Custom formatting
+2. Anchor links
+3. Loops
+
+### Filters
+
+Use the `|` symbol to modify a variable using a filter.
+
+The following filters are supported:
+
+| Filter | Only for | Description |
+|---|---|---|
+| `shorten`| ETH addresses | Display in a truncated format |
+
+For simplicity, this EIP will not support any other filters; these will have to come in a future EIP.
 
 ## Rationale
 <!--The rationale fleshes out the specification by describing what motivated the design and why particular design decisions were made. It should describe alternate designs that were considered and related work, e.g. how the feature is supported in other languages. The rationale may also provide evidence of consensus within the community, and should discuss important objections or concerns raised during discussion.-->
