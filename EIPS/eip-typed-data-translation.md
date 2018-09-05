@@ -13,7 +13,7 @@ requires: EIP712
 ## Simple Summary
 <!--"If you can't explain it simply, you don't understand it well enough." Provide a simplified and layman-accessible explanation of the EIP.-->
 
-This standard specifies how to translate data in wallet signing prompts into meaningful natural-language descriptions. This allows dApps to convey the intent behind each signature request, and users to make better-informed decisions about whether to sign a piece of data. It also reduces the risk of signing-prompt phishing.
+This standard specifies how to translate data in wallet signing prompts into meaningful natural-language descriptions. This allows dApps to convey the intent behind signature requests, and enables users to make better-informed decisions about whether to sign a piece of data. It also reduces the risk of signing-prompt phishing.
 
 ## Abstract
 <!--A short (~200 word) description of the technical issue being addressed.-->
@@ -28,11 +28,11 @@ This standard specifies the means by which EIP712-compatible structured data sho
 ## Motivation
 <!--The motivation is critical for EIPs that want to change the Ethereum protocol. It should clearly explain why the existing protocol specification is inadequate to address the problem that the EIP solves. EIP submissions without sufficient motivation may be rejected outright.-->
 
-Users of distributed applications (dApps) currently do not have a straightforward way to understand data in signing prompts. Although the [EIP712](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-712.md) standard for typed structured data signing allows dApps to clearly lay out such data, users have to rely on the dApp or their own research to find out what their signatures will be used for. This is less than ideal especially because signatures can authorise value transfers in certain smart contracts. As such, there is a need to effectively convey the meaning and intent behind a signature request, in order to improve the user experience for such potentially consequential operations.
+Users of distributed applications (dApps) currently do not have a straightforward way to understand data in signing prompts. Although the [EIP712](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-712.md) standard for typed structured data signing allows dApps to clearly lay out data to be signed, users have to rely on the dApp or their own research to find out exactly how or why their signatures will be used. This is less than ideal especially because signatures can authorise value transfers in certain smart contracts. As such, there is a need to effectively convey the meaning and intent behind a signature request, so as to improve the user experience for such potentially consequential operations.
 
-To rely on dApps to do so creates a phishing risk, as malicious dApps may request that users sign data meant for a third-party contract, but misrepresent this in their off-wallet user interfaces.
+To only rely on dApps for this purpose creates a phishing risk, since malicious dApps may request that users sign data meant for a third-party contract and misrepresent this fact in their off-wallet user interfaces.
 
-As such, Ethereum wallet signing prompts should be respnsible for displaying these natural-language explanatory blurbs. Furthermore, phishing can be prevented by validating translation templates off their cryptographic hash obtained from the contract specified in the EIP712 `domain` field.
+As such, Ethereum wallets should be respnsible for displaying these natural-language explanatory blurbs in their data signing prompts. Furthermore, phishing can be prevented by validating translations via cryptographic hashes obtained from contracts specified in the EIP712 `domain.verifyingContract` field.
 
 ## Example
 
