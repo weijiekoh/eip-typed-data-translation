@@ -239,13 +239,7 @@ Supported expressions:
 Use `if`, `elif`, and `else`.
 
 ```
-{% if message.temp < 0 %}
-    It's below freezing.
-{% elif message.temp == 0 %}
-    It's exactly 0 degrees.
-{% else %}
-    It's above freezing.
-{% endif %}
+The water is  {% if message.temp < 0 %}solid{% elif message.temp == 0 %}exactly 0 degrees{% else %}liquid or gaseous{% endif %}.
 ```
 
 For simplicity and security, it delibrately excludes:
