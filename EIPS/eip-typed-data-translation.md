@@ -257,6 +257,7 @@ The following filters are supported:
 | Filter | Only for | Description |
 |---|---|---|
 | `shorten`| ETH addresses | Display in a truncated format |
+| `token` | ETH addresses | Display an ERC20 token symbol instead (or in addition to) its full address |
 
 For simplicity, this EIP will not support any other filters; these will have to come in a future EIP.
 
