@@ -13,7 +13,7 @@ requires: EIP712
 ## Simple Summary
 <!--"If you can't explain it simply, you don't understand it well enough." Provide a simplified and layman-accessible explanation of the EIP.-->
 
-This standard specifies how to translate data in wallet signing prompts into meaningful natural-language descriptions. This allows dApps to convey the intent behind signature requests, and enables users to make better-informed decisions about whether to sign a piece of data. It also reduces the risk of signing-prompt phishing.
+This standard specifies how to translate data in wallet signing prompts into meaningful natural-language descriptions. This allows dApps to convey the intent behind each signature request, and users to make better-informed decisions about whether to sign a piece of data. It also reduces the risk of signing-prompt phishing.
 
 ## Abstract
 <!--A short (~200 word) description of the technical issue being addressed.-->
@@ -28,11 +28,11 @@ This standard specifies the means by which EIP712-compatible structured data sho
 ## Motivation
 <!--The motivation is critical for EIPs that want to change the Ethereum protocol. It should clearly explain why the existing protocol specification is inadequate to address the problem that the EIP solves. EIP submissions without sufficient motivation may be rejected outright.-->
 
-Users of distributed applications (dApps) currently do not have a straightforward way to understand data in signing prompts. Although the [EIP712](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-712.md) standard for typed structured data signing allows dApps to clearly lay out data to be signed, users have to rely on the dApp or their own research to find out exactly how or why their signatures will be used. This is less than ideal especially because signatures can authorise value transfers in certain smart contracts. As such, there is a need to effectively convey the meaning and intent behind a signature request, so as to improve the user experience for such potentially consequential operations.
+Users of distributed applications (dApps) currently do not have a straightforward way to understand data in signing prompts. Although the [EIP712](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-712.md) standard for typed structured data signing allows dApps to clearly lay out such data, users have to rely on the dApp or their own research to find out what their signatures will be used for. This is less than ideal especially because signatures can authorise value transfers in certain smart contracts. As such, there is a need to effectively convey the meaning and intent behind a signature request,  in order to improve the user experience for such potentially consequential operations.
 
-To only rely on dApps for this purpose creates a phishing risk, since malicious dApps may request that users sign data meant for a third-party contract and misrepresent this fact in their off-wallet user interfaces.
+To rely on dApps to do so creates a phishing risk, as malicious dApps may request that users sign data meant for a third-party contract, but misrepresent this in their off-wallet user interfaces.
 
-As such, Ethereum wallets should be respnsible for displaying these natural-language explanatory blurbs in their data signing prompts. Furthermore, phishing can be prevented by validating translations via cryptographic hashes obtained from contracts specified in the EIP712 `domain.verifyingContract` field.
+As such, Ethereum wallet signing prompts should be respnsible for displaying these natural-language explanatory blurbs. Furthermore, phishing can be prevented by validating translation templates off their cryptographic hash obtained from the contract specified in the EIP712 `domain` field.
 
 ## Example
 
@@ -83,7 +83,7 @@ Cow (0xCD2a3d9F... ) is sending the message "Hello, Bob!" to Bob (0xbBbBBBBb...)
 
 **Template language**
 
-A simple set of rules which govern the syntax and grammar of a template. This EIP proposes a simple default template language (see the *Default Template Langauge* section), but can be extended by future EIPs to allow dApps to specify other template languages.
+A simple set of rules which govern the syntax and grammar of a template. This EIP proposes a simple default template language (see the Default Template Langauge section), but can be extended by future EIPs to allow dApps to specify other template languages.
 
 **Template processor**
 
@@ -126,16 +126,16 @@ template: {
 
 dApps must include `defaultLang`, or risk a degraded user experience as the wallet provider has nothing to fall back upon if the contract has no template which corresponds to the user's preferred language code.
 
-| Scenarios | dApp provides *T* | Contract provides *m(T)* |
+|  Scenarios | dApp provides *T*  | Contract provides *m(T)*  |
 |---|---|---|
-| 1 and 5 | Y | Y |
+| 1 and 5  | Y  | Y  |
 | 2 | Y | N |
-| 3 | N | Y |
-| 4 | N | N |
+| 3  | N  | Y  |
+| 4 | N  | N  |
 
 #### Scenario 1: the dApp provides the template *T*, and its contract provides the template multihash *m(T)*.
 
-The wallet provider should call *C* (see the *Ethereum contract interface* section below) through an Ethereum node with the `keccak256` hash of the desired language code *g* to obtain *m(T)*. It then uses *m(T)* to verify *T*.
+The wallet provider should call *C* (see the *Ethereum contract interface*  section below) through an Ethereum node with the language code *g* to obtain *m(T)*. It then uses *m(T)* to verify *T*.
 
 Next, the wallet provider applies the template to the data to obtain the blurb and display it: **P(T, S) → E*. It must also give the user the option to view the raw data *S*.
 
@@ -203,7 +203,7 @@ Following the [Ether Mail example in EIP712](https://github.com/ethereum/EIPs/bl
 
 All text is HTML-escaped by default. `<b>hello</b>` will display exactly as `<b>hello</b>`.
 
-To avoid recursion, variables that reference the `template` field will be ignored.
+To avoid recursion, variables that reference`template` field will be ignored.
 
 ### Expressions
 
@@ -214,7 +214,7 @@ List indices start from 0 and use square brackets: `var[0]`.
 Supported expressions:
 
 | Expression | Type |
-|---|---|
+|---|---|  
 | `"abc"`| String |
 | `42` or `42.23` | Number |
 | `[‘list’, ‘of’, ‘objects’]` | List |
@@ -224,8 +224,8 @@ Supported expressions:
 | `*` | Multiply |
 | `/` | Divide |
 | `//` |Divide and floor |
-| `%` | Modulo |
-| `**` | Raise to the power of |
+| `%` | Modulo  |
+| `**` |  Raise to the power of |
 | `==` | Equal to |
 | `!=` | Not equal to |
 | `>` | Greater than |
@@ -269,7 +269,7 @@ The following assumptions and considerations shaped this EIP:
 1. IPFS is an ideal means of template storage as it is decentralised and censorship-resistant.
 2. To save gas, templates should not be stored in contracts. Instead, contracts should store their multihash, so they can be retrieved from IPFS.
 3. A simpler default template language is more secure and phishing-resistant than a complex one.
-4. In the context of this EIP, wallet providers are only responsible for ensuring that messages are translated according to the contract's specified template. Wallet providers are not responsible for what said contract does with signed data.
+4. In the context of this EIP, wallet providers are only responsible for ensuring that messages are translated according to the contract's specified template. Wallet providers are not responsible for what a said contracts do with signed data.
 
 ## Backwards Compatibility
 <!--All EIPs that introduce backwards incompatibilities must include a section describing these incompatibilities and their severity. The EIP must explain how the author proposes to deal with these incompatibilities. EIP submissions
@@ -291,7 +291,7 @@ TODO
 
 ## Credits
 
-Many thanks to Raman Shalupau, ___, ___, and for their feedback and comments.
+Many thanks to Barry Earsman, Raman Shalupau, and Michael Rice for their invaluable feedback and comments.
 
 ## Copyright
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
